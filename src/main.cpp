@@ -1,10 +1,10 @@
-#include "./file_operator.h"
+#include "./include/file_operator.h"
 
 int main(int argc, char const *argv[])
 {
     system("cls");
     /*文件路径*/
-    const std::string file_path = "./data_file.txt";
+    const std::string file_path = "./data/data_file.txt";
     /*统计的文件行数*/
     int line_count = 0;
 

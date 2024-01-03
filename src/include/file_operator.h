@@ -9,7 +9,7 @@
 #include <cctype>
 #include <algorithm>
 #include <chrono>
-#include <windows.h>
+//#include <windows.h>
 
 /*
     使用 macro 封装判断表达式：
@@ -65,6 +65,15 @@ static Data _data[MAX_DATA_COUNT];
     根据 Combination of Positives 的值进行升序排序
 */
 static auto SORT_RULES = [](Data & _a, Data & _b) -> bool { return EXTRACT(_a.COP) < EXTRACT(_b.COP); };
+
+/**
+ * 自制的延时函数，来代替 Windows 库中的 Sleep 函数。
+ * 
+ * @param _millis_seconds 要延迟的时间
+ * 
+ * @return non-return
+*/
+void delay_milliseconds(unsigned long int _millis_seconds);
 
 /**
  * 提取 COP 字符串中的数字，比如：

@@ -1,5 +1,10 @@
-#include "./file_operator.h"
+#include "./include/file_operator.h"
 
+void delay_milliseconds(unsigned long int _millis_seconds)
+{
+    clock_t start = clock();
+    while (clock() < start + _millis_seconds); 
+}
 
 void print_split_line(int length, char style)
 {
@@ -9,7 +14,6 @@ void print_split_line(int length, char style)
     }
     std::putchar('\n');
 }
-
 
 inline int extract_number(std::string & _cop)
 {
@@ -24,7 +28,6 @@ inline int extract_number(std::string & _cop)
     }
 
     ss_cop >> number;
-
 #endif
     /*
         将字符串 #-#-# 的数字提取出来，变成一个 3 位整数，
@@ -206,7 +209,7 @@ bool insert(const std::string _file_path, int _line_count, Data * temp_datapoint
     */
     while (binary_search(temp_datapointer, _temp_string, _line_count) != -1)
     {
-        std::cerr << "WARNING: Insert duplicate Combination of Positions! " << _temp_string << std::endl;
+        std::cerr << "WARNING: Insert duplicate Combination of Positions! [" << _temp_string << "]" << std::endl;
         std::clog << "Enter Combination of Positives (Format: #-#-#): \n";
         std::getline(std::cin, _temp_string);
         IF_QUIT(_temp_string);
@@ -335,7 +338,7 @@ void show_contence(Data * _data, const int _line_count)
     {
         std::cout << _data[index].COP << "\t\t\t\t" 
                   << _data[index].MPN_index << "\t\t\t" << _data[index].lower << '\t' << _data[index].upper << '\n';
-                  Sleep(60);
+                  delay_milliseconds(60);
     }
     print_split_line(70, '-');
 }
