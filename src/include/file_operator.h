@@ -64,7 +64,7 @@ static Data _data[MAX_DATA_COUNT];
     结构体数组示例 _data 的排序规则：
     根据 Combination of Positives 的值进行升序排序
 */
-static auto SORT_RULES = [](Data & _a, Data & _b) -> bool { return EXTRACT(_a.COP) < EXTRACT(_b.COP); };
+const static auto SORT_RULES = [](Data & _a, Data & _b) -> bool { return EXTRACT(_a.COP) < EXTRACT(_b.COP); };
 
 /**
  * 自制的延时函数，来代替 Windows 库中的 Sleep 函数。
