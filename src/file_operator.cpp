@@ -1,5 +1,14 @@
 #include "./include/file_operator.h"
 
+inline bool is_number(const std::string & __str)
+{
+    std::stringstream ss(__str); 
+    double x; 
+    char c;
+    if (ss >> x && !(ss >> c)) { return true; }  
+    return false;
+}
+
 void delay_milliseconds(unsigned long int _millis_seconds)
 {
     clock_t start = clock();
@@ -173,86 +182,70 @@ bool insert(const std::string _file_path, int _line_count, Data * temp_datapoint
 
     std::cout << "Enter Data to Insert (Press q to back): \n";
 
-    /*输入 Combination of Positives*/
-    std::cout << "Enter Combination of Positives (Format: #-#-#): \n";
-    std::getline(std::cin, _temp_string);
-
-    /*若输入了 q 就退出插入模式，回到菜单*/
-    IF_QUIT(_temp_string);
-   
-    /*检查用户输入的格式是否为 #-#-# 如果不是就得重新输入，避免写入垃圾数据*/
-    while (CHECK_FORMAT(_temp_string))
-    {
-        std::cerr << "Invalid Format!\n" << std::endl;
-        std::clog << "Enter Combination of Positives (Format: #-#-#): \n";
-        std::getline(std::cin, _temp_string);
-        IF_QUIT(_temp_string);
-
-#if false
-        if (binary_search(temp_datapointer, _temp_string, _line_count) != -1)
-        {
-            std::cerr << "WARNING: Insert duplicate Combination of Positions! " << _temp_string << std::endl;
-            std::clog << "Enter Combination of Positives (Format: #-#-#): \n";
-            std::getline(std::cin, _temp_string);
-            IF_QUIT(_temp_string);
-
-            //while (std::getchar() != '\n') { continue; }
-        }
-
-        //printf("bin search return index: %d\n", binary_search(temp_datapointer, _temp_string, _line_count));
-#endif
-    }
-
     /*
-        若输入的数据通过了格式检查，就来到重复数据检测环节。
-        若在结构体中找到了用户输入的数据，则证明输入了重复数据
+        使用循环去读取 table_key 中的内容，
+        这样可以应对数据量大的情况，在表中有 100 甚至 1000 个键的时候不至于歇菜。
     */
-    while (binary_search(temp_datapointer, _temp_string, _line_count) != -1)
+    for (const std::string & key : table_key)
     {
-        std::cerr << "WARNING: Insert duplicate Combination of Positions! [" << _temp_string << "]" << std::endl;
-        std::clog << "Enter Combination of Positives (Format: #-#-#): \n";
+        std::cout << "Enter " << key << ": \n";
         std::getline(std::cin, _temp_string);
+
         IF_QUIT(_temp_string);
 
-        /*检查用户输入的格式是否为 #-#-# 如果不是就得重新输入，避免写入垃圾数据*/
-        while (CHECK_FORMAT(_temp_string))
-        {
-            std::cerr << "Invalid Format!\n" << std::endl;
-            std::clog << "Enter Combination of Positives (Format: #-#-#): \n";
-            std::getline(std::cin, _temp_string);
-            IF_QUIT(_temp_string);
+        /*
+            处理输入非 Combination of Positives 键的情况，
+            这个数据只需要过一遍 is_number 函数的检查即可。
+        */
+        if (key != "Combination of Positives (Format: #-#-#)") 
+        { 
+            while (!is_number(_temp_string)) 
+            {
+                std::cerr << "Invalid Format!\n" << '\n';
+                std::cout << "Enter " << key << ": \n";
+                std::getline(std::cin, _temp_string);
+                IF_QUIT(_temp_string);
+            }
+            _data_string += " ";
+            _data_string += _temp_string; 
+        }
+        /*
+            处理 Combination of Positives 键的情况，
+            这个键需要做格式检查，看看是不是 #-#-# 的格式。
+            此外还要通过二分法搜索整个结构体，看看有没有重复输入。
+        */
+        else 
+        { 
+            while (CHECK_FORMAT(_temp_string))
+            {
+                std::cerr << "Invalid Format!\n" << '\n';
+                std::cout << "Enter " << key << ": \n";
+                std::getline(std::cin, _temp_string);
+                IF_QUIT(_temp_string);
+            }
+
+            while (binary_search(temp_datapointer, _temp_string, _line_count) != -1)
+            {
+                std::cerr << "WARNING: Insert duplicate Combination of Positions! [" << _temp_string << "]" << '\n';
+                std::cout << "Enter " << key << ": \n";
+                std::getline(std::cin, _temp_string);
+                IF_QUIT(_temp_string);
+
+                /*检查用户输入的格式是否为 #-#-# 如果不是就得重新输入，避免写入垃圾数据*/
+                while (CHECK_FORMAT(_temp_string))
+                {
+                    std::cerr << "Invalid Format!\n" << '\n';
+                    std::cout << "Enter " << key << ": \n";
+                    std::getline(std::cin, _temp_string);
+                    IF_QUIT(_temp_string);
+                }
+            }
+
+            _data_string += _temp_string; 
         }
     }
-
-    /*使用 += 拼接字符串*/
-    _data_string += _temp_string;
-
-    /*输入 Enter MPN index*/
-    std::cout << "Enter MPN index (per 100 ml): \n";
-    std::getline(std::cin, _temp_string);
-    IF_QUIT(_temp_string);
-
-    _data_string += " ";
-    _data_string += _temp_string;
-
-    /*输入 Lower*/
-    std::cout << "Enter 95% Confidence Limits of Lower: \n";
-    std::getline(std::cin, _temp_string);
-    IF_QUIT(_temp_string);
-
-    _data_string += " ";
-    _data_string += _temp_string;
-
-    /*输入 Upper*/
-    std::cout << "Enter 95% Confidence Limits of Upper: \n";
-    std::getline(std::cin, _temp_string);
-    IF_QUIT(_temp_string);
-
-    _data_string += " ";
-    _data_string += _temp_string;
 
     /*最终 把字符串 _data_string 拼接成 #-#-# ## ## ## 的形式，写入文件末尾*/
-
     _write_file << '\n' << _data_string;
 
     std::cout << "OK!\tdata:[" << _data_string << "]\tInsert Complete.\n";

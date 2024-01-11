@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
 
     while (choice != 'q')
     {
-        while (std::cin.get() != '\n') { continue; }
+        while (std::getchar() != '\n') { continue; }
         switch (choice)
         {
             case INSERT:

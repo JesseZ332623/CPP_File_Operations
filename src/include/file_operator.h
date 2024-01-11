@@ -61,15 +61,38 @@ typedef struct _Data
 static Data _data[MAX_DATA_COUNT];
 
 /*
+    对应表中的 4 个键，
+    有了这个字符串数组，就可以用循环来控制输入。
+    当然，这里不能用 printf 去读取，% C 有可能会被误认为格式字符。
+*/
+const std::vector<std::string> table_key = 
+{
+    "Combination of Positives (Format: #-#-#)",
+    "MPN index (per 100 ml)",
+    "95% Confidence Limits of Lower",
+    "95% Confidence Limits of Upper"
+};
+
+/*
     结构体数组示例 _data 的排序规则：
     根据 Combination of Positives 的值进行升序排序
 */
 const static auto SORT_RULES = [](Data & _a, Data & _b) -> bool { return EXTRACT(_a.COP) < EXTRACT(_b.COP); };
 
 /**
+ * @brief 通过 sscanf 的返回值来判断用户是否输入了数字，
+ * 路子比较野但有效。
+ * 
+ * @param __str 传入的字符串
+ * 
+ * @return 一个布尔类型，代表这个字符串是不是数字。如 "123"
+*/
+inline bool is_number(const std::string & __str);
+
+/**
  * 自制的延时函数，来代替 Windows 库中的 Sleep 函数。
  * 
- * @param _millis_seconds 要延迟的时间
+ * @param _millis_seconds 要延迟的时间，精确到毫秒
  * 
  * @return non-return
 */
