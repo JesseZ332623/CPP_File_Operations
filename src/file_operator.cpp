@@ -2,11 +2,12 @@
 
 inline bool is_number(const std::string & __str)
 {
-    std::stringstream ss(__str); 
-    double x; 
-    char c;
-    if (ss >> x && !(ss >> c)) { return true; }  
-    return false;
+    for (const char & ch : __str)
+    {
+        if (!std::isdigit(ch)) { return false; }
+    }
+
+    return true;
 }
 
 void delay_milliseconds(unsigned long int _millis_seconds)
@@ -186,7 +187,7 @@ bool insert(const std::string _file_path, int _line_count, Data * temp_datapoint
         使用循环去读取 table_key 中的内容，
         这样可以应对数据量大的情况，在表中有 100 甚至 1000 个键的时候不至于歇菜。
     */
-    for (const std::string & key : table_key)
+    for (auto & key : table_key)
     {
         std::cout << "Enter " << key << ": \n";
         std::getline(std::cin, _temp_string);
