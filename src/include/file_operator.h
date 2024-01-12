@@ -65,7 +65,7 @@ static Data _data[MAX_DATA_COUNT];
     有了这个字符串数组，就可以用循环来控制输入。
     当然，这里不能用 printf 去读取，% C 有可能会被误认为格式字符。
 */
-const std::vector<std::string> table_key = 
+std::vector<const std::string> table_key = 
 {
     "Combination of Positives (Format: #-#-#)",
     "MPN index (per 100 ml)",
