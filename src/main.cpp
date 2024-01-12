@@ -4,7 +4,8 @@ int main(int argc, char const *argv[])
 {
     system("cls");
     /*文件路径*/
-    const std::string file_path = "./data/data_file.txt";
+    std::string file_path; //= "./data/data_file.txt";
+
     /*统计的文件行数*/
     int line_count = 0;
 
@@ -16,8 +17,36 @@ int main(int argc, char const *argv[])
     */
     enum MENU {INSERT = '1', LOAD, SEARCH};
 
+    std::cout << "Enter The PATH of Data File: (Press q to qute):\n";
+    std::getline(std::cin, file_path);
+
+    //line_count = input(_data, file_path);
+
+    while ((file_path.length() >= 3) && (file_path.substr(file_path.length() - 3, 3) != "txt"))
+    {
+        if (file_path == "q") { exit(EXIT_SUCCESS); }
+        system("cls");
+        std::cerr << "Invalid PATH! (File Format Error, Only Support .txt File).\n";
+        std::getline(std::cin, file_path);
+    }
+
     /*先从文件读取数据到结构体，返回这个文件的行数*/
-    line_count = input(_data, file_path);
+    while (((line_count = input(_data, file_path)) == -1))
+    {
+        if (file_path == "q") { exit(EXIT_SUCCESS); }
+        system("cls");
+        std::cerr << "Invalid PATH! (Can Not Open File).\n";
+        std::cout << "Enter The PATH of Data File: (Press q to qute):\n";
+        std::getline(std::cin, file_path);
+
+        while ((file_path.length() >= 3) && (file_path.substr(file_path.length() - 3, 3) != "txt"))
+        {
+            if (file_path == "q") { exit(EXIT_SUCCESS); }
+            system("cls");
+            std::cerr << "Invalid PATH! (File Format Error, Only Support .txt File).\n";
+            std::getline(std::cin, file_path);
+        }
+    }
 
     /*展示结构体内容*/
     show_contence(_data, line_count);
