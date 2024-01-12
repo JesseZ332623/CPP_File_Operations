@@ -80,8 +80,7 @@ const std::vector<const char *> table_key =
 const static auto SORT_RULES = [](Data & _a, Data & _b) -> bool { return EXTRACT(_a.COP) < EXTRACT(_b.COP); };
 
 /**
- * @brief 通过 sscanf 的返回值来判断用户是否输入了数字，
- * 路子比较野但有效。
+ * @brief 逐个检查字符串中的字符是否为数字。
  * 
  * @param __str 传入的字符串
  * 
