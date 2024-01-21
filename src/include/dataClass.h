@@ -36,7 +36,7 @@ class PositiveConfidenceLimitsTable
          * 
          * @return          一个布尔类型，代表这个字符串是不是数字。如 "123"
         */
-        inline bool isNumber(const std::string & __str);
+        inline bool isNumber(const std::string & __str) const;
 
         /**
          * @brief   将动态数组 pclTable 内的所有数据按照 Combination of Positives 的值升序排列。
@@ -53,7 +53,7 @@ class PositiveConfidenceLimitsTable
          * 
          * @return              搜索结果，若存在，返回对应的下标。若不存在则返回 -1（其实最先进的办法是返回迭代器，不过我懒得搞）
         */
-        int binarySearch(const std::string & __target);
+        int binarySearch(const std::string & __target) const;
 
         /**
          * @brief                   按一定的规则分割字符串，然后将分割的字串存入一个动态数组中
@@ -63,7 +63,7 @@ class PositiveConfidenceLimitsTable
          * 
          * @return                  non-return
         */
-        inline void splitString(std::string & __fileLineString, std::vector<std::string> & __subStrings);
+        inline void splitString(std::string & __fileLineString, std::vector<std::string> & __subStrings) const;
 
         /**
          * @brief           显示单个 PositiveConfidenceLimits 的内容

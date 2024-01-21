@@ -15,7 +15,7 @@ inline void printSplitLine(int __len, const char __style)
     std::putchar('\n');
 }
 
-inline bool PositiveConfidenceLimitsTable::isNumber(const std::string & __str)
+inline bool PositiveConfidenceLimitsTable::isNumber(const std::string & __str) const
 {
     /*for_each 读取该字符串，如果发现字符串中的某一个字符不是数字字符 '0' ~ '9'，返回 false*/
     for (const char & ch : __str)
@@ -33,7 +33,7 @@ inline void PositiveConfidenceLimitsTable::sortPclTable()
     std::sort(pclTable.begin(), pclTable.end(), compareRule);
 }
 
-int PositiveConfidenceLimitsTable::binarySearch(const std::string & __target)
+int PositiveConfidenceLimitsTable::binarySearch(const std::string & __target) const
 {
 #if BINARY_SEARCH
     int left = 0;
@@ -68,7 +68,7 @@ int PositiveConfidenceLimitsTable::binarySearch(const std::string & __target)
 #endif
 }
 
-inline void PositiveConfidenceLimitsTable::splitString(std::string & __fileLineString, std::vector<std::string> & __subStrings)
+inline void PositiveConfidenceLimitsTable::splitString(std::string & __fileLineString, std::vector<std::string> & __subStrings) const
 {
     /*
         创建一个字符串流，传入 __fileLineString 构建。
@@ -245,7 +245,6 @@ bool PositiveConfidenceLimitsTable::search(void)
         IF_QUIT(target);
     }
 
-    //delayMilliseconds(5);
     int targetIndex = binarySearch(target);
 
     if (targetIndex == -1) 

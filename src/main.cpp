@@ -21,8 +21,6 @@ void showMenu();
 
 void checkPathFormat(std::string & __filePath)
 {
-    std::fstream openFile(__filePath);
-
     while ((__filePath.length() >= 3) && (__filePath.substr(__filePath.length() - 3, 3) != "txt"))
     {
         if (__filePath == "q") { std::cout << "Done.\n"; std::exit(EXIT_SUCCESS); }
@@ -30,9 +28,11 @@ void checkPathFormat(std::string & __filePath)
         std::system("cls");
 
         std::cerr << "Invalid PATH! (File Format Error, Only Support .txt File).\n";
+        std::cout << "Enter The PATH of Data File: (Press q to qute):\n";
         std::getline(std::cin, __filePath);
     }
 
+    std::fstream openFile(__filePath);
     while (!openFile.is_open())
     {
         if (__filePath == "q") { std::cout << "Done.\n"; std::exit(EXIT_SUCCESS); }
@@ -51,6 +51,7 @@ void checkPathFormat(std::string & __filePath)
             std::cerr << "Invalid PATH! (File Format Error, Only Support .txt File).\n";
             std::getline(std::cin, __filePath);
         }
+        openFile.open(__filePath);
     }
 }
 
@@ -74,6 +75,7 @@ int main(int argc, char const *argv[])
     std::getline(std::cin, filePath);
 
     checkPathFormat(filePath);
+    std::system("cls");
 
     newTable.readFile(filePath);
     std::cout << newTable << '\n';
@@ -108,7 +110,11 @@ int main(int argc, char const *argv[])
                 break;
 
             default:
-                std::cout << "invalid choice." << std::endl;
+                std::cerr << "Invalid choice!" << '\n';
+                delayMilliseconds(500);
+                system("cls");
+                newTable.readFile(filePath);
+                std::cout << newTable << '\n';
                 break;
         }
 
