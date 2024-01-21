@@ -44,6 +44,14 @@
 #define SEQUENTIAL_BRUTE_FORCE_SEARCH false
 
 /*
+    菜单枚举类型，功能如下：
+    INSERT  插入数据到文件末尾
+    LOAD    从文件加载数据到结构体，然后再排序结构体，最后输出至屏幕或其他地方
+    SEARCH  根据 Combination of Positives 查询对应的数据
+*/
+enum MENU {QUIT = '0', INSERT, LOAD, SEARCH}; 
+
+/*
     表中的数据在结构体中使用类型如下：
     1. Combination Of Positives 可以使用 std::string 类型
 

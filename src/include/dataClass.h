@@ -53,7 +53,7 @@ class PositiveConfidenceLimitsTable
          * 
          * @return              搜索结果，若存在，返回对应的下标。若不存在则返回 -1（其实最先进的办法是返回迭代器，不过我懒得搞）
         */
-        int binarySearch(std::string & __target);
+        int binarySearch(const std::string & __target);
 
         /**
          * @brief                   按一定的规则分割字符串，然后将分割的字串存入一个动态数组中
@@ -64,6 +64,15 @@ class PositiveConfidenceLimitsTable
          * @return                  non-return
         */
         inline void splitString(std::string & __fileLineString, std::vector<std::string> & __subStrings);
+
+        /**
+         * @brief           显示单个 PositiveConfidenceLimits 的内容
+         * 
+         * @param __tempPcl PositiveConfidenceLimits 结构体的引用
+         * 
+         * @return          non-return
+        */
+        inline void showOneLine(std::ostream & __os, PositiveConfidenceLimits & __tempPcl) const;
 
     public:
         /**
@@ -81,6 +90,13 @@ class PositiveConfidenceLimitsTable
          * @param _file_path    文件路径
         */
         bool insertFile(const std::string __filePath);
+
+        /**
+         * @brief           在动态数组 pclTable 中，寻找目标 COP 字符串，然后输出整行数据。
+         * 
+         * @return          是否查询成功
+        */
+        bool search(void);
 
         /**
          * @brief               输出 PositiveConfidenceLimitsTable 类的内容，主要是 pclTable 动态数组的内容。

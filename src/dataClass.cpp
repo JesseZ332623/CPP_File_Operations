@@ -33,7 +33,7 @@ inline void PositiveConfidenceLimitsTable::sortPclTable()
     std::sort(pclTable.begin(), pclTable.end(), compareRule);
 }
 
-int PositiveConfidenceLimitsTable::binarySearch(std::string & __target)
+int PositiveConfidenceLimitsTable::binarySearch(const std::string & __target)
 {
 #if BINARY_SEARCH
     int left = 0;
@@ -84,6 +84,13 @@ inline void PositiveConfidenceLimitsTable::splitString(std::string & __fileLineS
     {
         __subStrings.push_back(tempString);
     }
+}
+
+inline void PositiveConfidenceLimitsTable::showOneLine(std::ostream & __os, PositiveConfidenceLimits & __tempPcl) const
+{
+    __os << __tempPcl.COP << "\t\t\t\t" 
+              << __tempPcl.mpnIndex << "\t\t\t" << __tempPcl.lower << '\t' << __tempPcl.upper << '\n';
+    delayMilliseconds(65);
 }
 
 bool PositiveConfidenceLimitsTable::readFile(const std::string __filePath)
@@ -222,27 +229,54 @@ bool PositiveConfidenceLimitsTable::insertFile(const std::string __filePath)
     return true;
 }
 
+bool PositiveConfidenceLimitsTable::search(void)
+{
+    std::string target;
+
+    std::cout << "Enter Combination of Positive (Format: #-#-#): \n";
+    std::getline(std::cin, target);
+    IF_QUIT(target);
+
+    while (CHECK_COP_FORMAT(target))
+    {
+        std::clog << "Invalid Format!\n" << std::endl;
+        std::cout << "Enter Combination of Positives (Format: #-#-#): \n";
+        std::getline(std::cin, target);
+        IF_QUIT(target);
+    }
+
+    //delayMilliseconds(5);
+    int targetIndex = binarySearch(target);
+
+    if (targetIndex == -1) 
+    { 
+        std::clog << "Not Found Combination of Positive: [" << target << ']' << '\n';
+        return false; 
+    }
+    else
+    {
+        std::cout << "OK!\t Find the target data: \n";
+        printSplitLine(70, '-');
+        std::cout << "Combination of Positives" << '\t' << "MPN index(per 100 ml)" << '\t' << "Lower" << '\t' << "Upper" << '\n';
+        printSplitLine(70, '-');
+        showOneLine(std::cout, pclTable.at(targetIndex));
+        printSplitLine(70, '-');
+    }
+    return true;
+}
+
 std::ostream & operator<<(std::ostream & __os, PositiveConfidenceLimitsTable & __pclTable) 
 {
     printSplitLine(70, '-');
     __os << "Combination of Positives" << '\t' << "MPN index(per 100 ml)" << '\t' << "Lower" << '\t' << "Upper" << '\n';
     printSplitLine(70, '-');
 
-    /*调用 TIMER 宏计算遍历输出这个动态数组所用的时间，实际上就是做个样子，真正的开销全他妈花费在 delayMilliseconds 上了*/
-    int64_t runTime = TIMER(
-    std::for_each(__pclTable.pclTable.begin(), __pclTable.pclTable.end(), 
-                [&__os](PositiveConfidenceLimits & __tempPcl)
-                {
-                    __os << __tempPcl.COP << "\t\t\t\t" << __tempPcl.mpnIndex << "\t\t\t" << __tempPcl.lower << '\t' << __tempPcl.upper << '\n';
-                    delayMilliseconds(65);
-                }
-    );
-    );
+    for (PositiveConfidenceLimits & __temp : __pclTable.pclTable)
+    {
+        __pclTable.showOneLine(__os, __temp);
+    }
 
     printSplitLine(70, '-');
-
-    /*输出 历输出这个动态数组所用的时间，（Unit: ms）*/
-    __os << "execution time: " << runTime << " ms.\n";
 
     return __os;
 }
