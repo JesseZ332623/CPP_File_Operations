@@ -8,6 +8,7 @@
 #include <cctype>
 #include <algorithm>
 #include <chrono>
+#include <sstream>
    
 /*
     EXTRACT_COP_TO_NUMBER           将字符串 COP 从 #-#-# 的格式转换为一个 3 位整数用于比较
@@ -27,21 +28,52 @@
 /*
     TIMER                           计算一个函数的执行时间
 */
-#define TIMER(Run) [&](){\
-    auto t1 = std::chrono::system_clock::now();\
-    auto res = Run;\
-    auto t2 = std::chrono::system_clock::now();\
-    auto dt = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();\
-	std::cout << "execution time: " << dt << " ms." << std::endl;\
-	return res;\
+#define TIMER(Run) [&]() { \
+    auto t1 = std::chrono::system_clock::now(); \
+    Run; \
+    auto t2 = std::chrono::system_clock::now(); \
+    auto dt = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count(); \
+    return dt; \
 }()
+
+/*
+    BINARY_SEARCH                       选择二分法搜索
+    SEQUENTIAL_BRUTE_FORCE_SEARCH       选择暴力顺序搜索
+*/
+#define BINARY_SEARCH true
+#define SEQUENTIAL_BRUTE_FORCE_SEARCH false
+
+/*
+    表中的数据在结构体中使用类型如下：
+    1. Combination Of Positives 可以使用 std::string 类型
+
+    2. MPN_index                使用 int 类型
+
+    3. 95% Confidence Limits 
+    lower   使用 int 类型
+    upper   使用 int 类型
+*/
+struct PositiveConfidenceLimits
+{
+    public:
+        std::string COP;
+        int mpnIndex;
+
+        int lower;
+        int upper;
+
+        PositiveConfidenceLimits() {}
+
+        PositiveConfidenceLimits(std::string & __COP, int __mpnIndex, int __low, int __up) 
+        : COP(__COP), mpnIndex(__mpnIndex), lower(__low), upper(__up) {}
+};
 
 /*
     对应表中的 4 个键，
     有了这个字符串数组，就可以用循环来控制输入。
     当然，这里不能用 printf 去读取，% C 有可能会被误认为格式字符。
 */
-const std::vector<const char *> table_key = 
+const std::vector<const char *> tableKey = 
 {
     "Combination of Positives (Format: #-#-#)",
     "MPN index (per 100 ml)",
