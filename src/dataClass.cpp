@@ -101,11 +101,11 @@ bool PositiveConfidenceLimitsTable::readFile(const std::string __filePath)
     std::ifstream readStream(__filePath, std::ios_base::in);
 
     /*如果出现文件不存在，或者被其他进程占用等其他情况，则返回 false*/
-    if(!readStream.is_open()) { std::cerr << "Open File: " << __filePath << " Failed.\n"; return false; }
+    if(!readStream.is_open()) { std::cerr << TerminalTextColor(RED) << "Open File: " << __filePath << " Failed.\n" << TerminalTextColor(WHITE); return false; }
 
     pclTable.clear();
 
-    std::cout << "Load File: " << __filePath << '\n';
+    std::cout << TerminalTextColor(BLUE) << "Load File: " << __filePath << TerminalTextColor(WHITE) << '\n';
 
     /*由于读取文件某一行的字符串*/
     std::string fileLineStr;
@@ -138,7 +138,7 @@ bool PositiveConfidenceLimitsTable::readFile(const std::string __filePath)
     sortPclTable();
 
     /*读取完毕后输出报告行数*/
-    std::cout << "Load Complete. file line: " << pclTable.size() << " \n";
+    std::cout << TerminalTextColor(GREEN) << "Load Complete. file line: " << pclTable.size() << TerminalTextColor(WHITE) << " \n";
 
     readStream.close(); // 关闭文件
 
@@ -254,7 +254,7 @@ bool PositiveConfidenceLimitsTable::search(void)
     }
     else
     {
-        std::cout << "OK!\t Find the target data: \n";
+        std::cout << TerminalTextColor(GREEN) << "OK!\t Find the target data: \n" << TerminalTextColor(WHITE);
         printSplitLine(70, '-');
         std::cout << "Combination of Positives" << '\t' << "MPN index(per 100 ml)" << '\t' << "Lower" << '\t' << "Upper" << '\n';
         printSplitLine(70, '-');

@@ -38,7 +38,7 @@ void checkPathFormat(std::string & __filePath)
         if (__filePath == "q") { std::cout << "Done.\n"; std::exit(EXIT_SUCCESS); }
 
         system("cls");
-        std::cerr << "Invalid PATH! (Can Not Open File).\n";
+        std::cerr << TerminalTextColor(RED) << "Invalid PATH! (Can Not Open File).\n" << TerminalTextColor(WHITE);
         std::cout << "Enter The PATH of Data File: (Press q to qute):\n";
         std::getline(std::cin, __filePath);
 

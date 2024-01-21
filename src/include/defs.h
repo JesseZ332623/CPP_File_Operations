@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <chrono>
 #include <sstream>
+#include "./terminalColor.h"
    
 /*
     EXTRACT_COP_TO_NUMBER           将字符串 COP 从 #-#-# 的格式转换为一个 3 位整数用于比较
