@@ -101,11 +101,11 @@ bool PositiveConfidenceLimitsTable::readFile(const std::string __filePath)
     std::ifstream readStream(__filePath, std::ios_base::in);
 
     /*如果出现文件不存在，或者被其他进程占用等其他情况，则返回 false*/
-    if(!readStream.is_open()) { std::cerr << TerminalTextColor(RED) << "Open File: " << __filePath << " Failed.\n" << TerminalTextColor(WHITE); return false; }
+    if(!readStream.is_open()) { std::cerr << myLog.Error << "Open File: " << __filePath << " Failed.\n" << myLog.Original ; return false; }
 
     pclTable.clear();
 
-    std::cout << TerminalTextColor(BLUE) << "Load File: " << __filePath << TerminalTextColor(WHITE) << '\n';
+    std::cout << myLog.Notify << "Load File: " << __filePath << myLog.Original << '\n';
 
     /*由于读取文件某一行的字符串*/
     std::string fileLineStr;
@@ -138,7 +138,7 @@ bool PositiveConfidenceLimitsTable::readFile(const std::string __filePath)
     sortPclTable();
 
     /*读取完毕后输出报告行数*/
-    std::cout << TerminalTextColor(GREEN) << "Load Complete. file line: " << pclTable.size() << TerminalTextColor(WHITE) << " \n";
+    std::cout << myLog.Correct << "Load Complete. file line: " << pclTable.size() << myLog.Original << " \n";
 
     readStream.close(); // 关闭文件
 
@@ -150,7 +150,7 @@ bool PositiveConfidenceLimitsTable::insertFile(const std::string __filePath)
     std::ofstream insertStream(__filePath, std::ios_base::app);
 
     /*如果出现文件不存在，或者被其他进程占用等其他情况，则返回 false*/
-    if(!insertStream.is_open()) { std::cerr << "Open File: " << __filePath << " Failed.\n"; return false; }
+    if(!insertStream.is_open()) { std::cerr << myLog.Error << "Open File: " << __filePath << " Failed.\n" << myLog.Original ; return false; }
 
     std::string tempFileLineStr, fileLineString; 
 
@@ -175,7 +175,7 @@ bool PositiveConfidenceLimitsTable::insertFile(const std::string __filePath)
         {
             while (!isNumber(tempFileLineStr))
             {
-                std::cerr << "Invalid Format!\n" << '\n';
+                std::cerr << myLog.Warning << "Invalid Format!\n" << '\n' << myLog.Original;
                 std::cout << "Enter " << key << " again (Press q to back): \n";
                 std::getline(std::cin, tempFileLineStr);
                 IF_QUIT(tempFileLineStr);
@@ -192,7 +192,7 @@ bool PositiveConfidenceLimitsTable::insertFile(const std::string __filePath)
         {
             while (CHECK_COP_FORMAT(tempFileLineStr))
             {
-                std::cerr << "Invalid Format!\n" << '\n';
+                std::cerr << myLog.Warning << "Invalid Format!\n" << '\n' << myLog.Original;
                 std::cout << "Enter " << key << ": \n";
                 std::getline(std::cin, tempFileLineStr);
                 IF_QUIT(tempFileLineStr);
@@ -200,7 +200,7 @@ bool PositiveConfidenceLimitsTable::insertFile(const std::string __filePath)
 
             while (binarySearch(tempFileLineStr) != -1)
             {
-                std::cerr << "WARNING: Insert duplicate Combination of Positions! [" << tempFileLineStr << "]" << '\n';
+                std::cerr << myLog.Warning << "WARNING: Insert duplicate Combination of Positions! [" << tempFileLineStr << "]" << '\n' << myLog.Original;
                 std::cout << "Enter " << key << ": \n";
                 std::getline(std::cin, tempFileLineStr);
                 IF_QUIT(tempFileLineStr);
@@ -208,7 +208,7 @@ bool PositiveConfidenceLimitsTable::insertFile(const std::string __filePath)
                 /*检查用户输入的格式是否为 #-#-# 如果不是就得重新输入，避免写入垃圾数据*/
                 while (CHECK_COP_FORMAT(tempFileLineStr))
                 {
-                    std::cerr << "Invalid Format!\n" << '\n';
+                    std::cerr << myLog.Warning << "Invalid Format!\n" << '\n' << myLog.Original;
                     std::cout << "Enter " << key << ": \n";
                     std::getline(std::cin, tempFileLineStr);
                     IF_QUIT(tempFileLineStr);
@@ -221,7 +221,7 @@ bool PositiveConfidenceLimitsTable::insertFile(const std::string __filePath)
 
     insertStream << '\n' << fileLineString;
 
-    std::cout << "OK!\tdata:[" << fileLineString << "]\tInsert Complete.\n";
+    std::cout << myLog.Correct << "OK!\tdata:[" << fileLineString << "]\tInsert Complete.\n" << myLog.Original;
     printSplitLine(70, '-');
 
     insertStream.close();
@@ -239,7 +239,7 @@ bool PositiveConfidenceLimitsTable::search(void)
 
     while (CHECK_COP_FORMAT(target))
     {
-        std::clog << "Invalid Format!\n" << std::endl;
+        std::cerr << myLog.Warning << "Invalid Format!\n" << '\n' << myLog.Original;
         std::cout << "Enter Combination of Positives (Format: #-#-#): \n";
         std::getline(std::cin, target);
         IF_QUIT(target);
@@ -249,12 +249,12 @@ bool PositiveConfidenceLimitsTable::search(void)
 
     if (targetIndex == -1) 
     { 
-        std::clog << "Not Found Combination of Positive: [" << target << ']' << '\n';
+        std::clog << myLog.Warning << "Not Found Combination of Positive: [" << target << ']' << '\n' << myLog.Original;
         return false; 
     }
     else
     {
-        std::cout << TerminalTextColor(GREEN) << "OK!\t Find the target data: \n" << TerminalTextColor(WHITE);
+        std::cout << myLog.Correct << "OK!\t Find the target data: \n" << myLog.Original;
         printSplitLine(70, '-');
         std::cout << "Combination of Positives" << '\t' << "MPN index(per 100 ml)" << '\t' << "Lower" << '\t' << "Upper" << '\n';
         printSplitLine(70, '-');

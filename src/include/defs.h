@@ -24,7 +24,7 @@
 /*
     IF_QUIT                         检查用户是否输入了 q，以退出插入模式 或 查询模式
 */
-#define IF_QUIT(temp_str) if(temp_str == "q") { std::clog << "Back To The Menu." << std::endl; return false; }
+#define IF_QUIT(temp_str) if(temp_str == "q") { std::clog << myLog.Correct << "Back To The Menu." << '\n' << myLog.Original; return false; }
 
 /*
     TIMER                           计算一个函数的执行时间
@@ -89,5 +89,20 @@ const std::vector<const char *> tableKey =
     "95% Confidence Limits of Lower",
     "95% Confidence Limits of Upper"
 };
+
+typedef struct LogLevel
+{
+    TerminalTextColor Original;
+    TerminalTextColor Notify;
+    TerminalTextColor Warning;
+    TerminalTextColor Correct;
+    TerminalTextColor Error;
+
+    LogLevel(int O = WHITE, int N = BLUE, int W = YELLO, int C = GREEN, int E = RED) :
+    Original(O), Notify(N), Warning(W), Correct(C), Error(E) {}
+} MyLog;
+
+/*一个简单的日志库，用于不同类型消息的输出*/
+static MyLog myLog;
 
 #endif // __DEFS_H_

@@ -23,11 +23,11 @@ void checkPathFormat(std::string & __filePath)
 {
     while ((__filePath.length() >= 3) && (__filePath.substr(__filePath.length() - 3, 3) != "txt"))
     {
-        if (__filePath == "q") { std::cout << "Done.\n"; std::exit(EXIT_SUCCESS); }
+        if (__filePath == "q") { std::cout << myLog.Error << "Done.\n" << myLog.Original; std::exit(EXIT_SUCCESS); }
 
         std::system("cls");
 
-        std::cerr << "Invalid PATH! (File Format Error, Only Support .txt File).\n";
+        std::cerr << myLog.Warning << "Invalid PATH! (File Format Error, Only Support .txt File).\n" << myLog.Original;
         std::cout << "Enter The PATH of Data File: (Press q to qute):\n";
         std::getline(std::cin, __filePath);
     }
@@ -35,20 +35,20 @@ void checkPathFormat(std::string & __filePath)
     std::fstream openFile(__filePath);
     while (!openFile.is_open())
     {
-        if (__filePath == "q") { std::cout << "Done.\n"; std::exit(EXIT_SUCCESS); }
+        if (__filePath == "q") { std::cout << myLog.Error << "Done.\n" << myLog.Original; std::exit(EXIT_SUCCESS); }
 
         system("cls");
-        std::cerr << TerminalTextColor(RED) << "Invalid PATH! (Can Not Open File).\n" << TerminalTextColor(WHITE);
+        std::cerr << myLog.Warning << "Invalid PATH! (File Format Error, Only Support .txt File).\n" << myLog.Original;
         std::cout << "Enter The PATH of Data File: (Press q to qute):\n";
         std::getline(std::cin, __filePath);
 
         while ((__filePath.length() >= 3) && (__filePath.substr(__filePath.length() - 3, 3) != "txt"))
         {
-            if (__filePath == "q") { std::cout << "Done.\n"; std::exit(EXIT_SUCCESS); }
+            if (__filePath == "q") { std::cout << myLog.Error << "Done.\n" << myLog.Original; std::exit(EXIT_SUCCESS); }
 
             std::system("cls");
 
-            std::cerr << "Invalid PATH! (File Format Error, Only Support .txt File).\n";
+            std::cerr << myLog.Warning << "Invalid PATH! (File Format Error, Only Support .txt File).\n" << myLog.Original;
             std::getline(std::cin, __filePath);
         }
         openFile.open(__filePath);
@@ -110,7 +110,7 @@ int main(int argc, char const *argv[])
                 break;
 
             default:
-                std::cerr << "Invalid choice!" << '\n';
+                std::cerr << myLog.Warning << "Invalid choice!" << '\n' << myLog.Original;
                 delayMilliseconds(500);
                 system("cls");
                 newTable.readFile(filePath);
@@ -122,7 +122,7 @@ int main(int argc, char const *argv[])
         std::cin >> userChoose;
     }
 
-    std::cout << "Done.\n";
+    std::cout << myLog.Error << "Done.\n" << myLog.Original;
     
     return EXIT_SUCCESS;
 }
