@@ -2,7 +2,7 @@
 
 ## 来自厦门大学的软件工程专业的一道 C++ 文件操作题
 
-文件的 data_file.txt 的格式在手动写入时务必遵守每行 #-#-# ## ## ## 的格式，不然会造成读取错误或者无法读取。
+数据文件 `bin\data\dataFile.txt` 的格式在手动写入时务必遵守每行 `#-#-# ## ## ##` 的格式，不然会造成读取错误或者无法读取。
 
 数据文件的格式示例如下所示：
 
@@ -23,6 +23,6 @@
 
 ![runImage](./img/runImage.png)
 
-Latest Updat Date: 2024.01.21
+Latest Updat Date: 2024.01.22
 
 Author: JesseZ332623
