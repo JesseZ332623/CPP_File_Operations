@@ -23,7 +23,7 @@ void checkPathFormat(std::string & __filePath)
 {
     while ((__filePath.length() >= 3) && (__filePath.substr(__filePath.length() - 3, 3) != "txt"))
     {
-        if (__filePath == "q") { std::cout << myLog.Error << "Done.\n" << myLog.Original; std::exit(EXIT_SUCCESS); }
+        if (__filePath == "q") { std::cout << myLog.Correct << "Done.\n" << myLog.Original; std::exit(EXIT_SUCCESS); }
 
         std::system("cls");
 
@@ -35,7 +35,7 @@ void checkPathFormat(std::string & __filePath)
     std::fstream openFile(__filePath);
     while (!openFile.is_open())
     {
-        if (__filePath == "q") { std::cout << myLog.Error << "Done.\n" << myLog.Original; std::exit(EXIT_SUCCESS); }
+        if (__filePath == "q") { std::cout << myLog.Correct << "Done.\n" << myLog.Original; std::exit(EXIT_SUCCESS); }
 
         system("cls");
         std::cerr << myLog.Warning << "Invalid PATH! (File Format Error, Only Support .txt File).\n" << myLog.Original;
@@ -44,7 +44,7 @@ void checkPathFormat(std::string & __filePath)
 
         while ((__filePath.length() >= 3) && (__filePath.substr(__filePath.length() - 3, 3) != "txt"))
         {
-            if (__filePath == "q") { std::cout << myLog.Error << "Done.\n" << myLog.Original; std::exit(EXIT_SUCCESS); }
+            if (__filePath == "q") { std::cout << myLog.Correct << "Done.\n" << myLog.Original; std::exit(EXIT_SUCCESS); }
 
             std::system("cls");
 
@@ -96,6 +96,7 @@ int main(int argc, char const *argv[])
                 newTable.readFile(filePath);
                 std::cout << newTable << '\n';
                 break;
+
             case LOAD:
                 system("cls");
                 newTable.readFile(filePath);
@@ -122,7 +123,7 @@ int main(int argc, char const *argv[])
         std::cin >> userChoose;
     }
 
-    std::cout << myLog.Error << "Done.\n" << myLog.Original;
+    std::cout << myLog.Correct << "Done.\n" << myLog.Original;
     
     return EXIT_SUCCESS;
 }
