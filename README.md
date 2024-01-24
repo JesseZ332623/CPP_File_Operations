@@ -27,4 +27,4 @@ Latest Updat Date: 2024.01.24
 
 Author: JesseZ332623
 
-[GNU Affero General Public License v.3.0](https://www.gnu.org/licenses/agpl-3.0.en.html)
+Licence: [GNU AFFERO GENERAL PUBLIC LICENSE v.3.0](https://www.gnu.org/licenses/agpl-3.0.en.html)
