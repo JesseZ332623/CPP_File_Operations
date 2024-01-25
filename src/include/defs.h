@@ -9,7 +9,11 @@
 #include <algorithm>
 #include <chrono>
 #include <sstream>
+#include <cstring>
 #include "./terminalColor.h"
+
+/*软件版本*/
+#define SOFTWARE_VERSION "ver 0.5.0"
    
 /*
     EXTRACT_COP_TO_NUMBER           将字符串 COP 从 #-#-# 的格式转换为一个 3 位整数用于比较
@@ -47,8 +51,9 @@
 /*
     菜单枚举类型，功能如下：
     INSERT  插入数据到文件末尾
-    LOAD    从文件加载数据到结构体，然后再排序结构体，最后输出至屏幕或其他地方
+    LOAD    从文件加载数据到结构体，然后再排序结构体，最后输出至屏幕，文件或其他程序
     SEARCH  根据 Combination of Positives 查询对应的数据
+    QUIT    退出系统
 */
 enum MENU {QUIT = '0', INSERT, LOAD, SEARCH}; 
 
@@ -88,6 +93,14 @@ const std::vector<const char *> tableKey =
     "MPN index (per 100 ml)",
     "95% Confidence Limits of Lower",
     "95% Confidence Limits of Upper"
+};
+
+const std::vector<const char *> menuTable = 
+{
+    "1. Insert data",
+    "2. Load and display data",
+    "3. Search data",
+    "0. Exit system"
 };
 
 typedef struct LogLevel

@@ -6,7 +6,7 @@ void delayMilliseconds(unsigned long int __millisSeconds)
     while (clock() < start + __millisSeconds); 
 }
 
-inline void printSplitLine(int __len, const char __style)
+void printSplitLine(int __len, const char __style)
 {
     for (int len = 0; len < __len; ++len)
     {
@@ -275,6 +275,7 @@ std::ostream & operator<<(std::ostream & __os, PositiveConfidenceLimitsTable & _
         __pclTable.showOneLine(__os, __temp);
     }
 
+    printSplitLine(70, '-');
     printSplitLine(70, '-');
 
     return __os;

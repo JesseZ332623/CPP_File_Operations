@@ -20,7 +20,7 @@ void delayMilliseconds(unsigned long int __millisSeconds);
     * 
     * @return           non-return
 */
-inline void printSplitLine(int __len, const char __style);
+void printSplitLine(int __len, const char __style);
 
 class PositiveConfidenceLimitsTable
 {
