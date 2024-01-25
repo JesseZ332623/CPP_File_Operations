@@ -3,7 +3,7 @@
 void delayMilliseconds(unsigned long int __millisSeconds)
 {
     clock_t start = clock();
-    while (clock() < start + __millisSeconds); 
+    while (clock() < start + __millisSeconds) {}
 }
 
 void printSplitLine(int __len, const char __style)
