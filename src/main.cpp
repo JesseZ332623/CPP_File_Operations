@@ -128,7 +128,8 @@ int main(int argc, char const *argv[])
     char userChoose = 0;
     int64_t runTime = 0;
 
-    std::cout << "Enter The PATH of Data File: (Press q to qute):\n";
+    showInfo();
+    std::cout << myLog.Notify << "Enter The PATH of Data File: (Press q to qute):\n" << myLog.Original;
     std::getline(std::cin, filePath);
 
     checkPathFormat(filePath);
@@ -140,7 +141,7 @@ int main(int argc, char const *argv[])
     showMenu();
     std::cin >> userChoose;
 
-    while (userChoose != '0')
+    while (userChoose != 'q')
     {
         while (std::getchar() != '\n') { continue; }
         switch (userChoose)
@@ -160,18 +161,30 @@ int main(int argc, char const *argv[])
                 std::cout << newTable << '\n';
                 break;
 
+            case DELETE:
+                system("cls");
+                runTime = TIMER(newTable.deleteFileLine(filePath));
+                std::cout << "Execution time: " << runTime << " ms." << "\n\n";
+                delayMilliseconds(1600);
+                system("cls");
+                newTable.readFile(filePath);
+                std::cout << newTable << '\n';
+                break;
+
             case SEARCH:
                 system("cls");
-
                 runTime = TIMER(newTable.search());
                 std::cout << "Execution time: " << runTime << " ms." << "\n\n";
+                delayMilliseconds(1000);
+                std::cout << myLog.Notify << "File PATH: " << filePath << '\n' << myLog.Original;
+                std::cout << newTable << '\n';
                 break;
 
             default:
                 std::cerr << myLog.Warning << "Invalid choice!" << '\n' << myLog.Original;
                 delayMilliseconds(500);
                 system("cls");
-                newTable.readFile(filePath);
+                std::cout << myLog.Notify << "File PATH: " << filePath << '\n' << myLog.Original;
                 std::cout << newTable << '\n';
                 break;
         }
