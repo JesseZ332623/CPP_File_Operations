@@ -68,7 +68,7 @@ int PositiveConfidenceLimitsTable::binarySearch(const std::string & __target) co
 #endif
 }
 
-inline void PositiveConfidenceLimitsTable::splitString(std::string & __fileLineString, std::vector<std::string> & __subStrings) const
+void PositiveConfidenceLimitsTable::splitString(std::string & __fileLineString, std::vector<std::string> & __subStrings) const
 {
     /*
         创建一个字符串流，传入 __fileLineString 构建。
@@ -93,7 +93,32 @@ inline void PositiveConfidenceLimitsTable::showOneLine(std::ostream & __os, Posi
     delayMilliseconds(65);
 }
 
-bool PositiveConfidenceLimitsTable::readFile(const std::string __filePath)
+inline bool PositiveConfidenceLimitsTable::clearFileContent(const std::string & __filePath) const
+{
+    /*用 trunc 模式打开文件，回直接清空文件内容*/
+    std::ofstream clearStream(__filePath, std::ios_base::trunc);
+
+    /*如果出现文件不存在，或者被其他进程占用等其他情况，则返回 false*/
+    if (!clearStream.is_open()) { std::cerr << myLog.Error << "Can't open file: " << __filePath << '\n' << myLog.Original; return false; }
+
+    clearStream.close();
+
+    return true;
+}
+
+std::size_t PositiveConfidenceLimitsTable::searchCOPIndex(std::vector<std::string> & __fileLineArray, const std::string & __targetCOPString) const
+{
+    std::size_t lineArraySize = __fileLineArray.size();
+
+    for (int index = 0; index < lineArraySize; ++index)
+    {
+        if (__fileLineArray[index].substr(0, COP_STRING_LENGTH) == __targetCOPString) { return (std::size_t)index; }
+    }
+
+    return -1;
+}
+
+bool PositiveConfidenceLimitsTable::readFile(const std::string & __filePath)
 {
     /*
         以只读模式 std::ios_base::in 打开 __filePath 文件。
@@ -138,23 +163,23 @@ bool PositiveConfidenceLimitsTable::readFile(const std::string __filePath)
     sortPclTable();
 
     /*读取完毕后输出报告行数*/
-    std::cout << myLog.Correct << "Load Complete. file line: " << pclTable.size() << myLog.Original << " \n";
+    std::cout << myLog.Correct << "Load Complete. " << myLog.Original << " \n";
 
     readStream.close(); // 关闭文件
 
     return true;
 }
 
-bool PositiveConfidenceLimitsTable::insertFile(const std::string __filePath)
+bool PositiveConfidenceLimitsTable::insertFile(const std::string & __filePath)
 {
     std::ofstream insertStream(__filePath, std::ios_base::app);
 
     /*如果出现文件不存在，或者被其他进程占用等其他情况，则返回 false*/
-    if(!insertStream.is_open()) { std::cerr << myLog.Error << "Open File: " << __filePath << " Failed.\n" << myLog.Original ; return false; }
+    if(!insertStream.is_open()) { std::cerr << myLog.Error << "Open File: " << __filePath << " Failed.\n" << myLog.Original; return false; }
 
     std::string tempFileLineStr, fileLineString; 
 
-    std::cout << "Inset data to File: " << __filePath << " (Press q to back): \n";
+    std::cout << myLog.Notify << "Inset data to File: " << __filePath << " (Press q to back): \n" << myLog.Original;
 
     /*
         使用循环去读取 tableKey 中的内容，
@@ -169,11 +194,11 @@ bool PositiveConfidenceLimitsTable::insertFile(const std::string __filePath)
 
         /*
             处理输入非 Combination of Positives 键的情况，
-            这个数据只需要过一遍 isNumber 函数的检查即可。
+            这个数据只需要过一遍 isNumber() 函数的检查 和 非空检查 即可。
         */
         if (key != tableKey[0])
         {
-            while (!isNumber(tempFileLineStr))
+            while (!isNumber(tempFileLineStr) || tempFileLineStr.empty())
             {
                 std::cerr << myLog.Warning << "Invalid Format!\n" << '\n' << myLog.Original;
                 std::cout << "Enter " << key << " again (Press q to back): \n";
@@ -221,10 +246,90 @@ bool PositiveConfidenceLimitsTable::insertFile(const std::string __filePath)
 
     insertStream << '\n' << fileLineString;
 
-    std::cout << myLog.Correct << "OK!\tdata:[" << fileLineString << "]\tInsert Complete.\n" << myLog.Original;
+    std::cout << myLog.Correct << "OK!\tdata: [" << fileLineString << "]\tInsert Complete.\n" << myLog.Original;
     printSplitLine(70, '-');
 
     insertStream.close();
+
+    return true;
+}
+
+bool PositiveConfidenceLimitsTable::deleteFileLine(const std::string & __filePath)
+{
+    /*以输入输出模式打开目标文件*/
+    std::fstream deleteStream(__filePath, std::ios_base::in | std::ios_base::out);
+
+    /*如果出现文件不存在，或者被其他进程占用等其他情况，则返回 false*/
+    if (!deleteStream.is_open()) 
+    { 
+        std::cerr << myLog.Error << "Open File: " << __filePath << " Failed.\n" << myLog.Original; 
+        return false;
+    }
+
+    std::cout << myLog.Notify << "Inset data to File: " << __filePath << " (Press q to back): \n" << myLog.Original;
+
+    std::string targetCOPString;                // 目标 COP 字符串 
+    std::string tempLineString;                 // 用于暂存文件一行数据的字符串
+    std::vector<std::string> fileLineArray;     // 存储文件每一行字符串的动态数组
+    
+    /*从文件中逐行读取字符串并插入动态数组末尾*/
+    while (std::getline(deleteStream, tempLineString))
+    {
+        fileLineArray.push_back(tempLineString);
+    }
+
+    /*用户输入目标 COP 字符串，并对输入的字符串进行格式检查*/
+    std::cout << "Enter Combination of Positive You Want tO Delete (Format: #-#-#): \n";
+    std::getline(std::cin, targetCOPString);
+    IF_QUIT(targetCOPString);
+
+    while (CHECK_COP_FORMAT(targetCOPString))
+    {
+        std::cerr << myLog.Warning << "Invalid Format!\n" << '\n' << myLog.Original;
+        std::cout << "Enter Combination of Positive You Want TO Delete (Format: #-#-#): \n";
+        std::getline(std::cin, targetCOPString);
+        IF_QUIT(targetCOPString);
+    }
+
+    /*在动态数组中搜索目标字符串，返回其下标*/
+    std::size_t targetIndex = searchCOPIndex(fileLineArray, targetCOPString);
+    if (targetIndex == -1)
+    {
+        std::cerr << myLog.Warning << targetCOPString << " Not in File: " << __filePath << '\n' << myLog.Original;
+        std::cout << myLog.Correct << "Back To The Menu." << '\n' << myLog.Original;
+        return false;
+    }
+    std::string targetLineString = fileLineArray.at(targetIndex);
+
+    /*然后在动态数组中擦除*/
+    fileLineArray.erase(fileLineArray.begin() + targetIndex);
+
+    deleteStream.close();   // 暂时关闭文件
+
+    clearFileContent(__filePath);   // 清空文件所有内容
+
+    /*重新打开文件，并做检查*/
+    deleteStream.open(__filePath, std::ios_base::in | std::ios_base::out);
+
+    if (!deleteStream.is_open()) 
+    { 
+        std::cerr << myLog.Error << "Open File: " << __filePath << " Failed.\n" << myLog.Original; 
+        return false;
+    }
+
+    /*将动态数组中的所有数据写入文件*/
+    std::size_t lineArraySize = fileLineArray.size();
+    for (int index = 0; index < lineArraySize; ++index)
+    {
+        deleteStream << fileLineArray[index];
+        if (index != lineArraySize - 1) { deleteStream << '\n'; }
+    }
+
+    deleteStream.close();   // 关闭文件
+
+    /*报告删除成功*/
+    std::cout << myLog.Correct << "OK Delete [" << targetLineString << "] Successfully.\n" << myLog.Original;
+    printSplitLine(70, '-');
 
     return true;
 }
@@ -233,7 +338,8 @@ bool PositiveConfidenceLimitsTable::search(void)
 {
     std::string target;
 
-    std::cout << "Enter Combination of Positive (Format: #-#-#): \n";
+    std::cout << myLog.Notify << "Inset data form pclTable (Press q to back): \n" << myLog.Original;
+    std::cout << "Enter Combination of Positive You Want to Search (Format: #-#-#): \n";
     std::getline(std::cin, target);
     IF_QUIT(target);
 
@@ -266,6 +372,7 @@ bool PositiveConfidenceLimitsTable::search(void)
 
 std::ostream & operator<<(std::ostream & __os, PositiveConfidenceLimitsTable & __pclTable) 
 {
+    __os << "Toatal File Line Count: " << __pclTable.pclTable.size() << '\n';
     printSplitLine(70, '-');
     __os << "Combination of Positives" << '\t' << "MPN index(per 100 ml)" << '\t' << "Lower" << '\t' << "Upper" << '\n';
     printSplitLine(70, '-');
@@ -276,7 +383,6 @@ std::ostream & operator<<(std::ostream & __os, PositiveConfidenceLimitsTable & _
     }
 
     printSplitLine(70, '-');
-    printSplitLine(70, '-');
-
+    
     return __os;
 }
