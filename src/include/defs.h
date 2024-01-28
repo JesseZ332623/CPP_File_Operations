@@ -14,6 +14,15 @@
 
 /*软件版本*/
 #define SOFTWARE_VERSION "ver 0.5.0"
+
+/*
+    BINARY_SEARCH                       选择二分法搜索
+    SEQUENTIAL_BRUTE_FORCE_SEARCH       选择顺序暴力搜索
+*/
+#define BINARY_SEARCH true
+#define SEQUENTIAL_BRUTE_FORCE_SEARCH false
+
+#define COP_STRING_LENGTH 5         // Combination Of Positives 字符串的长度
    
 /*
     EXTRACT_COP_TO_NUMBER           将字符串 COP 从 #-#-# 的格式转换为一个 3 位整数用于比较
@@ -42,20 +51,13 @@
 }()
 
 /*
-    BINARY_SEARCH                       选择二分法搜索
-    SEQUENTIAL_BRUTE_FORCE_SEARCH       选择暴力顺序搜索
-*/
-#define BINARY_SEARCH true
-#define SEQUENTIAL_BRUTE_FORCE_SEARCH false
-
-/*
     菜单枚举类型，功能如下：
     INSERT  插入数据到文件末尾
     LOAD    从文件加载数据到结构体，然后再排序结构体，最后输出至屏幕，文件或其他程序
     SEARCH  根据 Combination of Positives 查询对应的数据
     QUIT    退出系统
 */
-enum MENU {QUIT = '0', INSERT, LOAD, SEARCH}; 
+enum MENU {INSERT = '1', LOAD, DELETE, SEARCH, QUIT = 'q'}; 
 
 /*
     表中的数据在结构体中使用类型如下：
@@ -99,8 +101,9 @@ const std::vector<const char *> menuTable =
 {
     "1. Insert data",
     "2. Load and display data",
-    "3. Search data",
-    "0. Exit system"
+    "3. Delete data",
+    "4. Search data",
+    "q. Exit system"
 };
 
 typedef struct LogLevel
