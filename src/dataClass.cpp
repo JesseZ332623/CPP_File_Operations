@@ -89,14 +89,14 @@ void PositiveConfidenceLimitsTable::splitString(std::string & __fileLineString, 
 inline void PositiveConfidenceLimitsTable::showOneLine(std::ostream & __os, PositiveConfidenceLimits & __tempPcl) const
 {
     __os << __tempPcl.COP << "\t\t\t\t" 
-              << __tempPcl.mpnIndex << "\t\t\t" << __tempPcl.lower << '\t' << __tempPcl.upper << '\n';
+         << __tempPcl.mpnIndex << "\t\t\t" << __tempPcl.lower << '\t' << __tempPcl.upper << '\n';
     delayMilliseconds(65);
 }
 
 inline bool PositiveConfidenceLimitsTable::clearFileContent(const std::string & __filePath) const
 {
     /*用 trunc 模式打开文件，回直接清空文件内容*/
-    std::ofstream clearStream(__filePath, std::ios_base::trunc);
+    std::ofstream clearStream(__filePath, CLEAR_MODE);
 
     /*如果出现文件不存在，或者被其他进程占用等其他情况，则返回 false*/
     if (!clearStream.is_open()) { std::cerr << myLog.Error << "Can't open file: " << __filePath << '\n' << myLog.Original; return false; }
@@ -120,10 +120,7 @@ std::size_t PositiveConfidenceLimitsTable::searchCOPIndex(std::vector<std::strin
 
 bool PositiveConfidenceLimitsTable::readFile(const std::string & __filePath)
 {
-    /*
-        以只读模式 std::ios_base::in 打开 __filePath 文件。
-    */
-    std::ifstream readStream(__filePath, std::ios_base::in);
+    std::ifstream readStream(__filePath, READ_ONLY_MODE);
 
     /*如果出现文件不存在，或者被其他进程占用等其他情况，则返回 false*/
     if(!readStream.is_open()) { std::cerr << myLog.Error << "Open File: " << __filePath << " Failed.\n" << myLog.Original ; return false; }
@@ -172,7 +169,7 @@ bool PositiveConfidenceLimitsTable::readFile(const std::string & __filePath)
 
 bool PositiveConfidenceLimitsTable::insertFile(const std::string & __filePath)
 {
-    std::ofstream insertStream(__filePath, std::ios_base::app);
+    std::ofstream insertStream(__filePath, END_INSERT_MODE);
 
     /*如果出现文件不存在，或者被其他进程占用等其他情况，则返回 false*/
     if(!insertStream.is_open()) { std::cerr << myLog.Error << "Open File: " << __filePath << " Failed.\n" << myLog.Original; return false; }
@@ -257,7 +254,7 @@ bool PositiveConfidenceLimitsTable::insertFile(const std::string & __filePath)
 bool PositiveConfidenceLimitsTable::deleteFileLine(const std::string & __filePath)
 {
     /*以输入输出模式打开目标文件*/
-    std::fstream deleteStream(__filePath, std::ios_base::in | std::ios_base::out);
+    std::fstream deleteStream(__filePath, READ_WRITE_MODE);
 
     /*如果出现文件不存在，或者被其他进程占用等其他情况，则返回 false*/
     if (!deleteStream.is_open()) 
@@ -309,7 +306,7 @@ bool PositiveConfidenceLimitsTable::deleteFileLine(const std::string & __filePat
     clearFileContent(__filePath);   // 清空文件所有内容
 
     /*重新打开文件，并做检查*/
-    deleteStream.open(__filePath, std::ios_base::in | std::ios_base::out);
+    deleteStream.open(__filePath, READ_WRITE_MODE);
 
     if (!deleteStream.is_open()) 
     { 
