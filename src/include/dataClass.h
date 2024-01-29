@@ -34,8 +34,7 @@ class PositiveConfidenceLimitsTable
          * 
          * @return              搜索结果，若存在，返回对应的下标。若不存在则返回 -1（其实最先进的办法是返回迭代器，不过我懒得搞）
         */
-        int
-        binarySearch(const std::string & __target) const;
+        int binarySearch(const std::string & __target) const;
 
         /**
          * @brief                   按一定的规则分割字符串，然后将分割的字串存入一个动态数组中
