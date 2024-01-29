@@ -11,7 +11,7 @@
 #include "./terminalColor.h"
 
 /*软件版本*/
-#define SOFTWARE_VERSION "ver 0.6.0"
+#define SOFTWARE_VERSION "ver 0.6.5"
 
 /*
     BINARY_SEARCH                       选择二分法搜索
@@ -20,7 +20,12 @@
 #define BINARY_SEARCH true
 #define SEQUENTIAL_BRUTE_FORCE_SEARCH false
 
-#define COP_STRING_LENGTH 5         // Combination Of Positives 字符串的长度
+#define COP_STRING_LENGTH 5             // Combination Of Positives 字符串的长度
+
+#define READ_ONLY_MODE  std::ios_base::in                       // 只读打开文件标志位
+#define READ_WRITE_MODE std::ios_base::in | std::ios_base::out  // 可读可写模式
+#define END_INSERT_MODE std::ios_base::app                      // 末尾插入模式打开标志位
+#define CLEAR_MODE      std::ios_base::trunc                    // 清理模式打开文件标志位 
    
 /*
     EXTRACT_COP_TO_NUMBER           将字符串 COP 从 #-#-# 的格式转换为一个 3 位整数用于比较
