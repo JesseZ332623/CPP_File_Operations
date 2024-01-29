@@ -3,25 +3,6 @@
 
 #include "./defs.h"
 
-/**
-    * @brief                    自制的延时函数，来代替 Windows 库中的 Sleep 函数。
-    * 
-    * @param __millisSeconds    要延迟的时间，精确到毫秒
-    * 
-    * @return                   non-return
-*/
-void delayMilliseconds(unsigned long int __millisSeconds);
-
- /**
-    * @brief            这个函数可以打印不同风格的分割线
-    * 
-    * @param __len      分割线的长度
-    * @param __style    分割线的风格，如（------- ****** 或 ·········）
-    * 
-    * @return           non-return
-*/
-void printSplitLine(int __len, const char __style);
-
 class PositiveConfidenceLimitsTable
 {
     private:
