@@ -1,7 +1,6 @@
 #ifndef __DEFS_H_
 #define __DEFS_H_
 
-#include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
@@ -13,7 +12,7 @@
 #include "./terminalColor.h"
 
 /*软件版本*/
-#define SOFTWARE_VERSION "ver 0.5.0"
+#define SOFTWARE_VERSION "ver 0.6.0"
 
 /*
     BINARY_SEARCH                       选择二分法搜索
