@@ -40,7 +40,7 @@
 /*
     IF_QUIT                         检查用户是否输入了 q，以退出插入模式 或 查询模式
 */
-#define IF_QUIT(temp_str) if(temp_str == "q") { std::clog << myLog.Correct << "Back To The Menu." << '\n' << myLog.Original; return false; }
+#define IF_QUIT(temp_str) if(temp_str == "q") { std::clog << myLog.Correct << "Back To The Menu." << '\n' << myLog.Original; dataFileStream.close(); return false; }
 
 /*
     TIMER                           计算一个函数的执行时间
@@ -52,18 +52,6 @@
     auto dt = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count(); \
     return dt; \
 }()
-
-/*
-    菜单枚举类型，功能如下：
-
-    BACK    退回到输入文件路径的界面
-    INSERT  插入数据到文件末尾
-    LOAD    从文件加载数据到结构体，然后再排序结构体，最后输出至屏幕，文件或其他程序
-    DELETE  输入 Combination of Positives 在文件检索对应的行并删除该行
-    SEARCH  根据 Combination of Positives 查询对应的数据
-    QUIT    退出系统
-*/
-enum MENU {BACK = '0', INSERT, LOAD, DELETE, SEARCH, QUIT = 'q'}; 
 
 /*
     表中的数据在结构体中使用类型如下：
@@ -88,29 +76,6 @@ struct PositiveConfidenceLimits
 
         PositiveConfidenceLimits(std::string & __COP, int __mpnIndex, int __low, int __up) 
         : COP(__COP), mpnIndex(__mpnIndex), lower(__low), upper(__up) {}
-};
-
-/*
-    对应表中的 4 个键，
-    有了这个字符串数组，就可以用循环来控制输入。
-    当然，这里不能用 printf 去读取，% C 有可能会被误认为格式字符。
-*/
-const std::vector<const char *> tableKey = 
-{
-    "Combination of Positives (Format: #-#-#)",
-    "MPN index (per 100 ml)",
-    "95% Confidence Limits of Lower",
-    "95% Confidence Limits of Upper"
-};
-
-const std::vector<const char *> menuTable = 
-{
-    "0. Back to File PATH Input",
-    "1. Insert data",
-    "2. Load and display data",
-    "3. Delete data",
-    "4. Search data",
-    "q. Exit system"
 };
 
 typedef struct LogLevel
