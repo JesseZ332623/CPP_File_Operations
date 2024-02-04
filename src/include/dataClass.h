@@ -2,6 +2,7 @@
 #define _DATACLASS_H_
 
 #include "./defs.h"
+#include "./optionsAndMenu.h"
 
 class PositiveConfidenceLimitsTable
 {
@@ -9,6 +10,12 @@ class PositiveConfidenceLimitsTable
 
         /* 考虑动态增长问题，因此创建一个由该结构体为元素的动态数组。*/
         std::vector<PositiveConfidenceLimits> pclTable;
+
+        std::fstream dataFileStream;
+
+        std::string filePath;
+
+    protected:
 
         /**
          * @brief           逐个检查字符串中的字符是否为数字。
@@ -77,6 +84,12 @@ class PositiveConfidenceLimitsTable
         std::size_t searchCOPIndex(std::vector<std::string> & __fileLineArray, const std::string & __targetCOPString) const;
 
     public:
+        PositiveConfidenceLimitsTable(std::string & __filePath) : filePath(__filePath) {}
+
+        std::string & getFilePath() { return filePath; }
+
+        void setFilePath(std::string & __filePath) {  filePath = __filePath; }
+
         /**
           * @brief              从文本文件中读入数据，并存入 pclTable 动态数组中
           * 
@@ -84,7 +97,7 @@ class PositiveConfidenceLimitsTable
           * 
           * @return             读取和存储成功返回 true，否则返回 false
         */
-        bool readFile(const std::string & __filePath);
+        bool readFile();
 
         /**
          * @brief               用户输入相关数据，并存入文件末尾
@@ -93,7 +106,7 @@ class PositiveConfidenceLimitsTable
          * 
          * @return              插入成功返回 true，否则返回 false
         */
-        bool insertFile(const std::string & __filePath);
+        bool insertFile();
 
         /**
          * @brief               用户输入 Combination of Positives 字符串，然后在文件中找到对应的这一行，将其删除
@@ -102,7 +115,7 @@ class PositiveConfidenceLimitsTable
          * 
          * @return              删除成功返回 true，否则返回 false
         */
-        bool deleteFileLine(const std::string & __filePath);
+        bool deleteFileLine();
 
         /**
          * @brief           在动态数组 pclTable 中，寻找目标 COP 字符串，然后输出整行数据。
@@ -120,6 +133,8 @@ class PositiveConfidenceLimitsTable
          * @return              标准输出对象的引用，以支持链式调用
         */
         friend std::ostream & operator<<(std::ostream & __os, PositiveConfidenceLimitsTable & __pclTable);
+
+        ~PositiveConfidenceLimitsTable();
 };
 
 #endif // _DATACLASS_H_
