@@ -1,10 +1,13 @@
 #ifndef _OPTIONS_AND_MENU_H_
 #define _OPTIONS_AND_MENU_H_
 
+#define TABLE_KEY_COUNT 4
+#define MENU_COUNT 6
+
 #include <array>
 
 /*
-    菜单枚举类型，功能如下：
+    菜单枚举类型，标志位说明如下：
 
     BACK    退回到输入文件路径的界面
     INSERT  插入数据到文件末尾
@@ -13,14 +16,14 @@
     SEARCH  根据 Combination of Positives 查询对应的数据
     QUIT    退出系统
 */
-enum MENU {BACK = '0', INSERT, LOAD, DELETE, SEARCH, QUIT = 'q'}; 
+enum MENU { BACK = '0', INSERT, LOAD, DELETE, SEARCH, QUIT = 'q' }; 
 
 /*
     对应表中的 4 个键，
     有了这个字符串数组，就可以用循环来控制输入。
     当然，这里不能用 printf 去读取，% C 有可能会被误认为格式字符。
 */
-const std::array<const char *, 4> tableKey = 
+const std::array<const char *, TABLE_KEY_COUNT> tableKey = 
 {
     "Combination of Positives (Format: #-#-#)",
     "MPN index (per 100 ml)",
@@ -28,7 +31,16 @@ const std::array<const char *, 4> tableKey =
     "95% Confidence Limits of Upper"
 };
 
-const std::array<const char *, 6> menuTable = 
+/*
+    主菜单列表：
+    0. 返回文件路径输入界面
+    1. 插入模式
+    2. 加载并输出文件
+    3. 删除文件数据
+    4. 搜索文件数据
+    5. 退出系统
+*/
+const std::array<const char *, MENU_COUNT> menuTable = 
 {
     "0. Back to File PATH Input",
     "1. Insert data",
