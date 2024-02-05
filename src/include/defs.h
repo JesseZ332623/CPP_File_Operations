@@ -23,7 +23,7 @@
 #define COP_STRING_LENGTH 5             // Combination Of Positives 字符串的长度
 
 #define READ_ONLY_MODE  std::ios_base::in                       // 只读打开文件标志位
-#define READ_WRITE_MODE std::ios_base::in | std::ios_base::out  // 可读可写模式
+#define READ_WRITE_MODE (std::ios_base::in | std::ios_base::out)  // 可读可写模式
 #define END_INSERT_MODE std::ios_base::app                      // 末尾插入模式打开标志位
 #define CLEAR_MODE      std::ios_base::trunc                    // 清理模式打开文件标志位 
    
