@@ -1,4 +1,5 @@
 #include "./include/dataClass.h"
+#include "./include/optionsAndMenu.h"
 
 void delayMilliseconds(unsigned long int __millisSeconds)
 {
@@ -247,6 +248,122 @@ bool PositiveConfidenceLimitsTable::insertFile()
     return true;
 }
 
+bool PositiveConfidenceLimitsTable::modifyFileLine()
+{
+    dataFileStream.open(filePath, READ_WRITE_MODE);
+
+    /*如果出现文件不存在，或者被其他进程占用等其他情况，则返回 false*/
+    if(!dataFileStream.is_open()) 
+    { 
+        std::cerr << myLog.Error 
+                  << "Open File: " << filePath << " Failed.\n" 
+                  << myLog.Original; 
+        return false; 
+    }
+
+    std::string tempLineString;                 // 用于暂存文件一行数据的字符串
+    std::vector<std::string> fileLineArray;     // 存储文件每一行字符串的动态数组
+    
+    /*从文件中逐行读取字符串并插入动态数组末尾*/
+    while (std::getline(dataFileStream, tempLineString))
+    {
+        fileLineArray.push_back(tempLineString);
+    }
+
+    /*用户输入 COP 字符串*/
+    std::string tempCOPString;
+    std::cout << myLog.Notify << "Modify data to File:" << getFilePath() << myLog.Original << '\n';
+    std::cout << "Please enter" << tableKey[0] << "(Press q to back):" << '\n';
+    std::getline(std::cin, tempCOPString);
+    IF_QUIT(tempCOPString);
+
+    /*检查字符串的合法性*/
+    while (CHECK_COP_FORMAT(tempCOPString))
+    {
+        std::cerr << myLog.Warning << "Invalid Format!\n" << '\n' << myLog.Original;
+        std::cout << "Please enter " << tableKey[0] << " (Press q to back):" << '\n';
+        std::getline(std::cin, tempCOPString);
+        IF_QUIT(tempCOPString);
+    }
+
+    /*在动态数组中搜索目标字符串，返回其下标*/
+    std::size_t targetIndex = searchCOPIndex(fileLineArray, tempCOPString);
+    if (targetIndex == -1)  // 若找不到，就报错并关闭文件后返回
+    {
+        std::cerr << myLog.Warning << tempCOPString << " Not in File: " << getFilePath() << '\n' << myLog.Original;
+        std::cout << myLog.Correct << "Back To The Menu." << '\n' << myLog.Original;
+        dataFileStream.close();
+        delayMilliseconds(1600);
+        return false;
+    }
+
+    std::cout << myLog.Correct 
+              << "OK Find data [ " << fileLineArray.at(targetIndex) 
+              << " ] in file: " << getFilePath() << '\n' 
+              << myLog.Original;
+    printSplitLine(70, '-');
+
+    /*要新写入文件的字符串，先保存 COP 的值*/
+    std::string newFileLineString = fileLineArray.at(targetIndex).substr(0, COP_STRING_LENGTH + 1);
+
+    /*临时存储除 Combination of Positives 以外值的字符串*/
+    std::string tempSubString;
+    fileLineArray.at(targetIndex).clear();
+
+    for (const char * key : tableKey)
+    {
+        if (strcmp(key, tableKey.at(0)) == 0) { continue; }
+
+        std::cout << "Please enter: new " << key << " (Press q to back): \n";
+        std::getline(std::cin, tempSubString);
+        IF_QUIT(tempSubString);
+
+        while (!isNumber(tempSubString) || tempSubString.empty())
+        {
+            std::cerr << myLog.Warning << "Invalid Format!\n" << '\n' << myLog.Original;
+            std::cout << "Enter " << key << " again (Press q to back): \n";
+            std::getline(std::cin, tempSubString);
+            IF_QUIT(tempSubString);
+        }
+        tempSubString += " ";
+        newFileLineString += tempSubString;
+    }
+
+    //std::cout << newFileLineString << '\n';
+
+    fileLineArray.at(targetIndex) = newFileLineString;
+
+    dataFileStream.close();
+
+    clearFileContent(filePath);   // 清空文件所有内容
+
+    /*重新打开文件，并做检查*/
+    dataFileStream.open(filePath, END_INSERT_MODE);
+
+    if(!dataFileStream.is_open()) 
+    { 
+        std::cerr << myLog.Error 
+                  << "Open File: " << getFilePath() << " Failed.\n" 
+                  << myLog.Original; 
+        return false; 
+    }
+
+    std::size_t lineArraySize = fileLineArray.size();
+    for (int index = 0; index < lineArraySize; ++index)
+    {
+        dataFileStream << fileLineArray[index];
+        if (index != lineArraySize - 1) { dataFileStream << '\n'; }
+    }
+
+    std::cout << myLog.Correct << "OK! The new table line is: [ " << newFileLineString << "]\n" << myLog.Original;
+
+    dataFileStream.close();
+
+    std::cout << myLog.Correct << "Back To The Menu." << '\n' << myLog.Original;
+
+    return false;
+}
+
 bool PositiveConfidenceLimitsTable::deleteFileLine()
 {
     /*以输入输出模式打开目标文件*/
@@ -380,5 +497,3 @@ std::ostream & operator<<(std::ostream & __os, PositiveConfidenceLimitsTable & _
     
     return __os;
 }
-
-PositiveConfidenceLimitsTable::~PositiveConfidenceLimitsTable() { dataFileStream.close(); }
