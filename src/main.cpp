@@ -58,6 +58,14 @@ int main(int argc, char const *argv[])
                 std::cout << newTable << '\n';
                 break;
 
+            case MODIFY:
+                newTable.modifyFileLine();
+                delayMilliseconds(1600);
+                system("cls");
+                newTable.readFile();
+                std::cout << newTable << '\n';
+                break;
+
             case DELETE:
                 system("cls");
                 runTime = TIMER(newTable.deleteFileLine());
