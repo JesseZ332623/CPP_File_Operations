@@ -2,21 +2,20 @@
 #define _DATACLASS_H_
 
 #include "./defs.h"
-#include "./optionsAndMenu.h"
 
 class PositiveConfidenceLimitsTable
 {
     private:
-
         /* 考虑动态增长问题，因此创建一个由该结构体为元素的动态数组。*/
         std::vector<PositiveConfidenceLimits> pclTable;
-
+        
+        /*目标文件的文件流*/
         std::fstream dataFileStream;
 
+        /*目标文件路径*/
         std::string filePath;
 
     protected:
-
         /**
          * @brief           逐个检查字符串中的字符是否为数字。
          * 
@@ -74,7 +73,7 @@ class PositiveConfidenceLimitsTable
 
         /**
          * @brief           根据传入的动态数组和目标 COP 字符串，
-         *                  去动态数组中找到这个字符串（顺序暴力搜索），并返回它的下标（也就是对应了文件的行数）。
+         *                  去动态数组中找到这个字符串（顺序暴力搜索），并返回它的下标。
          * 
          * @param __fileLineArray   存储文件中读取所有行的数据的动态数组的引用
          * @param __targetCOPString 目标 COP 字符串
@@ -84,16 +83,31 @@ class PositiveConfidenceLimitsTable
         std::size_t searchCOPIndex(std::vector<std::string> & __fileLineArray, const std::string & __targetCOPString) const;
 
     public:
+        /**
+         * @brief   构建函数，初始化文件路径
+         * 
+         * @param   __filePath 文件路径
+        */
         PositiveConfidenceLimitsTable(std::string & __filePath) : filePath(__filePath) {}
 
-        std::string & getFilePath() { return filePath; }
+        /**
+         * @brief 获取当前文件路径
+         * 
+         * @return 当前文件路径
+        */
+        std::string & getFilePath() { return filePath; } const
 
-        void setFilePath(std::string & __filePath) {  filePath = __filePath; }
+        /**
+         * @brief 重设文件路径
+         * 
+         * @param   __newFilePath 新文件路径
+         * 
+         * @return  non-return
+        */
+        void setFilePath(std::string & __newFilePath) {  filePath = __newFilePath; }
 
         /**
           * @brief              从文本文件中读入数据，并存入 pclTable 动态数组中
-          * 
-          * @param __filePath   要读取文件的路径
           * 
           * @return             读取和存储成功返回 true，否则返回 false
         */
@@ -102,16 +116,19 @@ class PositiveConfidenceLimitsTable
         /**
          * @brief               用户输入相关数据，并存入文件末尾
          * 
-         * @param _file_path    文件路径
-         * 
          * @return              插入成功返回 true，否则返回 false
         */
         bool insertFile();
 
         /**
-         * @brief               用户输入 Combination of Positives 字符串，然后在文件中找到对应的这一行，将其删除
+         * @brief               修改目标文件中一行中，除 Combination of Positives 的数据
          * 
-         * @param _file_path    文件路径
+         * @return              修改成功返回 true，否则返回 false
+        */
+        bool modifyFileLine();
+
+        /**
+         * @brief               用户输入 Combination of Positives 字符串，然后在文件中找到对应的这一行，将其删除
          * 
          * @return              删除成功返回 true，否则返回 false
         */
@@ -134,7 +151,7 @@ class PositiveConfidenceLimitsTable
         */
         friend std::ostream & operator<<(std::ostream & __os, PositiveConfidenceLimitsTable & __pclTable);
 
-        ~PositiveConfidenceLimitsTable();
+        ~PositiveConfidenceLimitsTable() { dataFileStream.close(); };
 };
 
 #endif // _DATACLASS_H_
