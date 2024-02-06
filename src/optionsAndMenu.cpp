@@ -5,7 +5,7 @@ void showMenu()
 {
     std::cout << "Enter your choice: \n";
 
-    std::for_each(menuTable.begin(), menuTable.end(), [](const char * __str) { std::cout << __str << "   "; });
+    std::for_each(menuTable.begin(), menuTable.end(), [](const char * __str) { std::cout << __str << "\n"; });
 
     std::cout << '\n' << "Your Choose: ";
 }

@@ -2,7 +2,7 @@
 #define _OPTIONS_AND_MENU_H_
 
 #define TABLE_KEY_COUNT 4
-#define MENU_COUNT 6
+#define MENU_COUNT 7
 
 #include <array>
 
@@ -12,11 +12,12 @@
     BACK    退回到输入文件路径的界面
     INSERT  插入数据到文件末尾
     LOAD    从文件加载数据到结构体，然后再排序结构体，最后输出至屏幕，文件或其他程序
+    MODIFY  修改目标文件中一行中，除 Combination of Positives 以外的数据
     DELETE  输入 Combination of Positives 在文件检索对应的行并删除该行
     SEARCH  根据 Combination of Positives 查询对应的数据
     QUIT    退出系统
 */
-enum MENU { BACK = '0', INSERT, LOAD, DELETE, SEARCH, QUIT = 'q' }; 
+enum MENU { BACK = '0', INSERT, LOAD, MODIFY, DELETE, SEARCH, QUIT = 'q' }; 
 
 /*
     对应表中的 4 个键，
@@ -36,17 +37,19 @@ const std::array<const char *, TABLE_KEY_COUNT> tableKey =
     0. 返回文件路径输入界面
     1. 插入模式
     2. 加载并输出文件
-    3. 删除文件数据
-    4. 搜索文件数据
-    5. 退出系统
+    3. 修改表中某一行数据
+    4. 删除文件数据
+    5. 搜索文件数据
+    q. 退出系统
 */
 const std::array<const char *, MENU_COUNT> menuTable = 
 {
     "0. Back to File PATH Input",
     "1. Insert data",
     "2. Load and display data",
-    "3. Delete data",
-    "4. Search data",
+    "3. Modidy data",
+    "4. Delete data",
+    "5. Search data",
     "q. Exit system"
 };
 
