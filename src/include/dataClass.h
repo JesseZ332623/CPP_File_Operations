@@ -95,7 +95,7 @@ class PositiveConfidenceLimitsTable
          * 
          * @return 当前文件路径
         */
-        std::string & getFilePath() { return filePath; } const
+        std::string & getFilePath(void) { return filePath; } const
 
         /**
          * @brief 重设文件路径
@@ -111,28 +111,28 @@ class PositiveConfidenceLimitsTable
           * 
           * @return             读取和存储成功返回 true，否则返回 false
         */
-        bool readFile();
+        bool readFile(void);
 
         /**
          * @brief               用户输入相关数据，并存入文件末尾
          * 
          * @return              插入成功返回 true，否则返回 false
         */
-        bool insertFile();
+        bool insertFile(void);
 
         /**
          * @brief               修改目标文件中一行中，除 Combination of Positives 的数据
          * 
          * @return              修改成功返回 true，否则返回 false
         */
-        bool modifyFileLine();
+        bool modifyFileLine(void);
 
         /**
          * @brief               用户输入 Combination of Positives 字符串，然后在文件中找到对应的这一行，将其删除
          * 
          * @return              删除成功返回 true，否则返回 false
         */
-        bool deleteFileLine();
+        bool deleteFileLine(void);
 
         /**
          * @brief           在动态数组 pclTable 中，寻找目标 COP 字符串，然后输出整行数据。
