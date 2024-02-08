@@ -119,7 +119,7 @@ std::size_t PositiveConfidenceLimitsTable::searchCOPIndex(std::vector<std::strin
     return -1;
 }
 
-bool PositiveConfidenceLimitsTable::readFile()
+bool PositiveConfidenceLimitsTable::readFile(void)
 {
     /*以只读模式打开文件*/
     dataFileStream.open(filePath, READ_ONLY_MODE);
@@ -163,7 +163,7 @@ bool PositiveConfidenceLimitsTable::readFile()
     return true;
 }
 
-bool PositiveConfidenceLimitsTable::insertFile()
+bool PositiveConfidenceLimitsTable::insertFile(void)
 {
     /*以末尾插入模式打开文件*/
     dataFileStream.open(filePath, END_INSERT_MODE);
@@ -248,7 +248,7 @@ bool PositiveConfidenceLimitsTable::insertFile()
     return true;
 }
 
-bool PositiveConfidenceLimitsTable::modifyFileLine()
+bool PositiveConfidenceLimitsTable::modifyFileLine(void)
 {
     dataFileStream.open(filePath, READ_WRITE_MODE);
 
@@ -364,7 +364,7 @@ bool PositiveConfidenceLimitsTable::modifyFileLine()
     return false;
 }
 
-bool PositiveConfidenceLimitsTable::deleteFileLine()
+bool PositiveConfidenceLimitsTable::deleteFileLine(void)
 {
     /*以输入输出模式打开目标文件*/
     dataFileStream.open(filePath, READ_WRITE_MODE);
