@@ -96,6 +96,8 @@ int main(int argc, char const *argv[])
 
         showMenu();
         std::cin >> userChoose;
+ 
+        //while (getchar() != '\n') { continue; }
     }
 
     std::cout << myLog.Correct << "Done.\n" << myLog.Original;
