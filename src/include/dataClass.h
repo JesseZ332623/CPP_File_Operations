@@ -34,6 +34,16 @@ class PositiveConfidenceLimitsTable
         inline void sortPclTable(void);
 
         /**
+         * @brief  将 PCL 结构体的数据转换回字符串，以便在后面重新写入文件，
+         *         让文件内的数据也变得有序。
+         * 
+         * @param  __pclStruct PCL 结构体的（只读）引用
+         * 
+         * @return  经过转换后的字符串
+        */
+        std::string pclStructToString(const PositiveConfidenceLimits & __pclStruct);
+
+        /**
          * @brief               二分法搜索，在整个 pclTable 动态数组中搜素目标 COP，针对数据量较大的情况，能有效的提高效率（绝对比暴力搜索快）
          * 
          * @param __target      要在该数组内搜索的目标 Combination Of Positives 字符串
