@@ -34,6 +34,11 @@ inline void PositiveConfidenceLimitsTable::sortPclTable()
     std::sort(pclTable.begin(), pclTable.end(), compareRule);
 }
 
+std::string PositiveConfidenceLimitsTable::pclStructToString(const PositiveConfidenceLimits & __pclStruct)
+{
+    return std::string(__pclStruct.COP + " " + std::to_string(__pclStruct.mpnIndex) + " " + std::to_string(__pclStruct.lower) + " " + std::to_string(__pclStruct.upper));
+}
+
 int PositiveConfidenceLimitsTable::binarySearch(const std::string & __target) const
 {
 #if BINARY_SEARCH
@@ -157,6 +162,17 @@ bool PositiveConfidenceLimitsTable::readFile(void)
 
     /*读取完毕后输出报告行数*/
     std::cout << myLog.Correct << "Load Complete. " << myLog.Original << " \n";
+
+    dataFileStream.close(); // 暂时关闭文件
+
+    clearFileContent(this->filePath);   // 清空文件所有内容
+
+    dataFileStream.open(filePath, END_INSERT_MODE);
+
+    for (const PositiveConfidenceLimits & pcl : pclTable)
+    {
+        dataFileStream << pclStructToString(pcl) << '\n';
+    }
 
     dataFileStream.close(); // 关闭文件
 
