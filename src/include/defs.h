@@ -93,6 +93,12 @@ typedef struct LogLevel
 /*一个简单的日志库，用于不同类型消息的输出*/
 static MyLog myLog;
 
+#define ORIGINAL myLog.Original
+#define NOTIFY mylog.Notify
+#define WARNING myLog.Warning
+#define CORRECT myLog.Correct
+#define ERROR myLog.Error
+
 /**
     * @brief                    自制的延时函数，来代替 Windows 库中的 Sleep 函数。
     * 
