@@ -22,7 +22,7 @@
 |2024.1.28|增加了删除数据的功能|
 |2024.1.29|增加了在 Menu 中返回文件路径输入界面的选项|
 |2024.2.06|增加了修改数据的功能，当前已经完成增删改查的操作|
-|2024.2.28|增加 `PositiveConfidenceLimitsTable::pclStructToString()` 私有方法，可以在读取文件的时候，将结构体动态数组中的数据转化成字符串再有序的重新写入文件，基于上述，很多操作都可以在未来重构了|
+|2024.2.28|增加 `PositiveConfidenceLimitsTable::pclStructToString()` 私有方法，可以在读取文件（`PositiveConfidenceLimitsTable::readFile()`）的时候，将结构体动态数组中的数据转化成字符串再有序的重新写入文件，基于上述，很多操作都可以在未来重构了|
 
 ### 运行截图
 
