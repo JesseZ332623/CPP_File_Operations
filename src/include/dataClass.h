@@ -90,7 +90,7 @@ class PositiveConfidenceLimitsTable
          * 
          * @return                  目标 COP 字符串在动态数组中的下标，若没找到则返回 -1         
         */
-        std::size_t searchCOPIndex(std::vector<std::string> & __fileLineArray, const std::string & __targetCOPString) const;
+        int searchCOPIndex(std::vector<std::string> & __fileLineArray, const std::string & __targetCOPString) const;
 
     public:
         /**
