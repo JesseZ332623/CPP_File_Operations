@@ -4,7 +4,7 @@
 void delayMilliseconds(unsigned long int __millisSeconds)
 {
     clock_t start = clock();
-    while (clock() < start + __millisSeconds) {}
+    while ((unsigned long int)clock() < start + __millisSeconds) {}
 }
 
 void printSplitLine(int __len, const char __style)
@@ -30,8 +30,11 @@ inline bool PositiveConfidenceLimitsTable::isNumber(const std::string & __str) c
 
 inline void PositiveConfidenceLimitsTable::sortPclTable()
 {
-    auto compareRule = [](PositiveConfidenceLimits & __a, PositiveConfidenceLimits & __b) { return EXTRACT_COP_TO_NUMBER(__a.COP) <  EXTRACT_COP_TO_NUMBER(__b.COP); };
-    std::sort(pclTable.begin(), pclTable.end(), compareRule);
+    std::sort(pclTable.begin(), pclTable.end(), 
+              [](PositiveConfidenceLimits & __a, PositiveConfidenceLimits & __b) { 
+                return EXTRACT_COP_TO_NUMBER(__a.COP) < EXTRACT_COP_TO_NUMBER(__b.COP); 
+              }
+            );
 }
 
 std::string PositiveConfidenceLimitsTable::pclStructToString(const PositiveConfidenceLimits & __pclStruct)
@@ -112,11 +115,11 @@ inline bool PositiveConfidenceLimitsTable::clearFileContent(const std::string & 
     return true;
 }
 
-std::size_t PositiveConfidenceLimitsTable::searchCOPIndex(std::vector<std::string> & __fileLineArray, const std::string & __targetCOPString) const
+int PositiveConfidenceLimitsTable::searchCOPIndex(std::vector<std::string> & __fileLineArray, const std::string & __targetCOPString) const
 {
     std::size_t lineArraySize = __fileLineArray.size();
 
-    for (int index = 0; index < lineArraySize; ++index)
+    for (std::size_t index = 0; index < lineArraySize; ++index)
     {
         if (__fileLineArray[index].substr(0, COP_STRING_LENGTH) == __targetCOPString) { return (std::size_t)index; }
     }
@@ -303,7 +306,7 @@ bool PositiveConfidenceLimitsTable::modifyFileLine(void)
     }
 
     /*在动态数组中搜索目标字符串，返回其下标*/
-    std::size_t targetIndex = searchCOPIndex(fileLineArray, tempCOPString);
+    int targetIndex = searchCOPIndex(fileLineArray, tempCOPString);
     if (targetIndex == -1)  // 若找不到，就报错并关闭文件后返回
     {
         std::cerr << myLog.Warning << tempCOPString << " Not in File: " << getFilePath() << '\n' << myLog.Original;
@@ -365,7 +368,7 @@ bool PositiveConfidenceLimitsTable::modifyFileLine(void)
     }
 
     std::size_t lineArraySize = fileLineArray.size();
-    for (int index = 0; index < lineArraySize; ++index)
+    for (std::size_t index = 0; index < lineArraySize; ++index)
     {
         dataFileStream << fileLineArray[index];
         if (index != lineArraySize - 1) { dataFileStream << '\n'; }
@@ -418,7 +421,7 @@ bool PositiveConfidenceLimitsTable::deleteFileLine(void)
     }
 
     /*在动态数组中搜索目标字符串，返回其下标*/
-    std::size_t targetIndex = searchCOPIndex(fileLineArray, targetCOPString);
+    int targetIndex = searchCOPIndex(fileLineArray, targetCOPString);
     if (targetIndex == -1)
     {
         std::cerr << myLog.Warning << targetCOPString << " Not in File: " << filePath << '\n' << myLog.Original;
@@ -446,7 +449,7 @@ bool PositiveConfidenceLimitsTable::deleteFileLine(void)
 
     /*将动态数组中的所有数据写入文件*/
     std::size_t lineArraySize = fileLineArray.size();
-    for (int index = 0; index < lineArraySize; ++index)
+    for (std::size_t index = 0; index < lineArraySize; ++index)
     {
         dataFileStream << fileLineArray[index];
         if (index != lineArraySize - 1) { dataFileStream << '\n'; }
